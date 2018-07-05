@@ -10,6 +10,8 @@ import Kingfisher
 import SDWebImage
 import PINRemoteImage
 import PINCache
+import YYWebImage
+import YYCache
 
 // MARK: - Main-Thread Performance
 
@@ -81,6 +83,18 @@ class CacheHitPerformanceTests: XCTestCase {
             }
         }
     }
+    
+    func testYYWebImage() {
+        for url in self.urls {
+            YYWebImageManager.shared().cache?.setImage(image, imageData:nil, forKey: url.absoluteString, with: .memory)
+        }
+        
+        measure {
+            for url in self.urls {
+                self.view.yy_setImage(with: url, options: [])
+            }
+        }
+    }
 }
 
 class CacheMissPerformanceTests: XCTestCase {
@@ -125,6 +139,14 @@ class CacheMissPerformanceTests: XCTestCase {
         measure {
             for url in self.urls {
                 self.view.sd_setImage(with: url)
+            }
+        }
+    }
+    
+    func testYYWebImage() {
+        measure {
+            for url in self.urls {
+                self.view.yy_setImage(with: url, options: [])
             }
         }
     }
